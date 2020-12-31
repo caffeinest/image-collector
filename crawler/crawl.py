@@ -35,5 +35,9 @@ def crawl_with_keyword(keyword):
             file_idx_offset='auto'
         )
 
-for keyword in keywords:
-    crawl_with_keyword(keyword)
+if __name__ == '__main__':
+    from multiprocessing import Pool
+
+    with Pool(len(keywords)) as p:
+        p.map(crawl_with_keyword, keywords)
+
