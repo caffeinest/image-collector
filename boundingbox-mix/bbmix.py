@@ -262,3 +262,15 @@ def mix_images(object_bundle):
 
 with multiprocessing.Pool(70) as p:
     results = p.map(mix_images, object_bundles)
+
+
+images, annotations = zip(*results)
+annotations = list(itertools.chain(*annotations))
+classes = [{'class_idx': idx, 'classname': classname} for idx, classname in enumerate(classnames)]
+
+with open('generated_annotations.json', 'w') as f:
+    f.write(json.dumps({
+        'images': images,
+        'annotations': annotations,
+        'classes': classes,
+    }))
