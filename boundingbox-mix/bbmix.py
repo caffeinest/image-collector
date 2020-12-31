@@ -125,3 +125,36 @@ def rotate_and_resize(base_image, image):
 
 def paste(base_image, image, pos, mask=None):
     Image.Image.paste(base_image, image, tuple(map(int, pos)), mask=mask)
+
+def determine_one_image(base_size, image_size):
+    width, height = base_size[0] - image_size[0], base_size[1] - image_size[1]
+    return random.uniform(min(0, width), max(0, width)), random.uniform(min(0, width), max(0, height))
+
+def determine_two_images(base_size, image_sizes):
+    width, height = base_size
+
+    first_size = image_sizes[0]
+    first_pos = (random.uniform(-width * 0.1, width * 0.1), random.uniform(-height * 0.1, height * 0.1))
+
+    if first_pos[0] + first_size[0] > first_pos[1] + first_size[1]:
+        second_pos = (0, first_pos[1] + first_size[1])
+    else:
+        second_pos = (first_pos[0] + first_size[0], 0)
+
+    second_pos = (random.uniform(second_pos[0], second_pos[0] + width * 0.1), random.uniform(second_pos[1], second_pos[1] - height * 0.1))
+
+    return [first_pos, second_pos]
+
+import math
+def determine_more_images(base_size, image_sizes, pos_noise=0.1):
+    width, height = base_size
+
+    angle = math.pi * random.uniform(0, 2)
+
+    points = []
+    for i in range(len(image_sizes)):
+        angle = angle + math.pi * 2 / len(image_sizes)
+        width_noise, height_noise = random.uniform(-width * 0.1, 0), random.uniform(-height * 0.1, 0)
+        points.append(((math.cos(angle) + 1) * 0.25 * width + width_noise, (math.sin(angle) + 1) * 0.25 * height + height_noise))
+
+    return points
