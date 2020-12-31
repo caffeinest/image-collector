@@ -56,4 +56,6 @@ def download(annotation):
     except:
         print(f'error download {image_id}')
 
-download(download_image_list[0])
+with multiprocessing.Pool(70) as pool:
+    pool.map(download, download_image_list)
+
