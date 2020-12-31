@@ -260,4 +260,5 @@ def mix_images(object_bundle):
 
     return image_annotation, annotation_annotation
 
-mix_images(object_bundles[0]) # for test
+with multiprocessing.Pool(70) as p:
+    results = p.map(mix_images, object_bundles)
