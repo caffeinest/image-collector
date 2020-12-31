@@ -212,3 +212,26 @@ def mix(images):
         paste(base_image, image, image_pos, mask=mask)
 
     return base_image
+
+
+
+new_objects = list(itertools.chain(*objects)) * 2
+random.shuffle(new_objects)
+
+classnames = ['paper', 'paper-package', 'can', 'glass', 'pet', 'plastic', 'vinyl']
+classname_to_class_idx = {classname: idx for idx, classname in enumerate(classnames)}
+
+pivot = 0
+idx = 0
+
+object_bundles = []
+while pivot < len(new_objects):
+    mix_n = random.randint(2, 3)
+    if pivot + mix_n >= len(new_objects): break
+
+    object_bundles.append((idx, new_objects[pivot:pivot+mix_n]))
+
+    pivot += mix_n
+    idx += 1
+
+object_bundles += [(i, [object]) for i, object in enumerate(itertools.chain(*objects), idx)]
