@@ -79,3 +79,49 @@ import multiprocessing
 
 with multiprocessing.Pool(70) as p:
     objects = p.map(get_objects, annotations)
+
+
+
+from torchvision.transforms import functional as F
+
+import numpy as np
+def get_noise_image():
+    base = np.random.randn(720, 720, 3)
+    mean = np.array((0.485, 0.456, 0.406))
+    std = np.array((0.229, 0.224, 0.225))
+
+    image = (((base * std) + mean).clip(0, 1) * 255).astype(np.uint8)
+
+    return Image.fromarray(image)
+
+def rotate_and_resize(base_image, image):
+    width, height = base_image.size
+
+    mask = Image.new('L', image.size, 255)
+
+    p = random.randint(0, 360)
+
+    rotated_image = F.rotate(image, angle=p, resample=Image.BICUBIC, expand=True)
+    rotated_mask = F.rotate(mask, angle=p, resample=Image.BICUBIC, expand=True)
+
+    p = random.uniform(0.4, 0.6)
+
+    im_width, im_height = rotated_image.size
+
+    longer_edge = int(min(width, height, max(im_width, im_height) * 2) * p)
+
+    if im_width > im_height:
+        resized_im_width = longer_edge
+        resized_im_height = longer_edge * im_height // im_width
+    else:
+        resized_im_width = longer_edge * im_width // im_height
+        resized_im_height = longer_edge
+
+
+    resized_image = F.resize(rotated_image, (resized_im_height, resized_im_width), Image.BICUBIC)
+    resized_mask = F.resize(rotated_mask, (resized_im_height, resized_im_width), Image.BICUBIC)
+
+    return resized_image, resized_mask
+
+def paste(base_image, image, pos, mask=None):
+    Image.Image.paste(base_image, image, tuple(map(int, pos)), mask=mask)
