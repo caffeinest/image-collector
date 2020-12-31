@@ -235,3 +235,29 @@ while pivot < len(new_objects):
     idx += 1
 
 object_bundles += [(i, [object]) for i, object in enumerate(itertools.chain(*objects), idx)]
+
+
+def mix_images(object_bundle):
+    idx, object_bundle = object_bundle
+
+    croped_images = [crop(load_image('data/' + object['original_image']), object['box'], margin_pct=random.uniform(0.01, 0.05)) for object in object_bundle]
+
+    mixed_image = mix([croped_image for croped_image in croped_images])
+
+    mixed_image.save(os.path.join('generated_data/{:06d}.png'.format(idx)))
+
+    image_annotation = {
+        'image_idx': idx,
+        'filename': '{:06d}.png'.format(idx),
+    }
+
+    labels = set(itertools.chain(*[object['labels'] for object in object_bundle]))
+
+    annotation_annotation = [{
+        'image_idx': idx,
+        'class_idx': classname_to_class_idx[label],
+    } for label in labels]
+
+    return image_annotation, annotation_annotation
+
+mix_images(object_bundles[0]) # for test
