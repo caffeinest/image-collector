@@ -195,3 +195,20 @@ def normalize_image_pos(base_image, images, images_pos):
     dx, dy = overall_x - top, overall_y - left
 
     return [(image_pos[0] + dx, image_pos[1] + dy) for image_pos in images_pos]
+
+
+
+def mix(images):
+    base_image = get_noise_image()
+
+    width, height = base_image.size
+
+    images, masks = zip(*[rotate_and_resize(base_image, image) for image in images])
+
+    images_pos = determine_image_pos(base_image, images)
+    normalized_pos = normalize_image_pos(base_image, images, images_pos)
+
+    for image, mask, image_pos in zip(images, masks, normalized_pos):
+        paste(base_image, image, image_pos, mask=mask)
+
+    return base_image
