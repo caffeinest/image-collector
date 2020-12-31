@@ -1,5 +1,10 @@
 from icrawler.builtin import GoogleImageCrawler
 
+filters = {
+    'size': '>640x480',
+    'type': 'photo',
+}
+
 keywords = (
     ('test_keyword1', 'test_category'),
     ('test_keyword2', 'test_category'),
