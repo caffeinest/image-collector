@@ -16,13 +16,15 @@ google_crawler = GoogleImageCrawler(
 start_date = datetime(year=2010, month=1, day=1)
 date_delta = timedelta(days=120)
 
-keyword_filters = {
-    'date': (start_date, start_date + date_delta),
-}
+for i in range(10000000):
+    pivot_date = start_date + date_delta * i
+    keyword_filters = {
+        'date': (pivot_date, pivot_date + date_delta),
+    }
 
-google_crawler.crawl(
-    keyword=keyword,
-    filters=filters,
-    keyword_filters=keyword_filters,
-    max_num=15,
-)
+    google_crawler.crawl(
+        keyword=keyword,
+        filters=filters,
+        keyword_filters=keyword_filters,
+        max_num=15,
+    )
