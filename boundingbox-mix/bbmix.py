@@ -158,3 +158,40 @@ def determine_more_images(base_size, image_sizes, pos_noise=0.1):
         points.append(((math.cos(angle) + 1) * 0.25 * width + width_noise, (math.sin(angle) + 1) * 0.25 * height + height_noise))
 
     return points
+
+def determine_image_pos(base_image, images):
+    # len(image) == 1
+    #   pos = 0,0 ~ base_image.size - image.size
+
+    # len(image) == 2
+    #   pos = 0,0 ~ base_image.size * 0.2
+    #     if width > height: others_top -> one_height + one top
+
+    # len(image) == 3
+    #   circle/3 + alpha + noise
+
+    if len(images) == 1:
+        return [determine_one_image(base_image.size, images[0].size)]
+    elif len(images) == 2:
+        return determine_two_images(base_image.size, [image.size for image in images])
+    elif len(images) >= 3:
+        return determine_more_images(base_image.size, [image.size for image in images])
+    else:
+        raise NotImplemented
+
+def normalize_image_pos(base_image, images, images_pos):
+    image_xs, image_ys = zip(*images_pos)
+
+    top, left = min(image_xs), min(image_ys)
+
+    image_widths, image_heights = zip(*[image.size for image in images])
+
+    bottom, right = max([x + width for x, width in zip(image_xs, image_widths)]), max([y + height for y, height in zip(image_ys, image_heights)])
+
+    width, height = base_image.size
+
+    overall_x, overall_y = (width // 2 - (bottom - top) // 2, height // 2 - (right - left) // 2)
+
+    dx, dy = overall_x - top, overall_y - left
+
+    return [(image_pos[0] + dx, image_pos[1] + dy) for image_pos in images_pos]
