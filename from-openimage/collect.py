@@ -41,3 +41,19 @@ try:
 except FileExistsError as e:
     pass
 
+import wget
+
+import itertools
+print(collections.Counter(itertools.chain(*image_label_dict.values())))
+
+def download(annotation):
+    image_id, url, rotation = annotation
+    _, extention = os.path.splitext(url)
+    save_path = os.path.join(download_dir, image_id + extention)
+
+    try:
+        wget.download(url, out=save_path)
+    except:
+        print(f'error download {image_id}')
+
+download(download_image_list[0])
