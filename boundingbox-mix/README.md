@@ -1,11 +1,11 @@
-bounding box mix image
+## bounding box mix image
 
-usage
+### usage
 
-create data directory (with labelme detection format)
+1. create data directory (with labelme detection format)
 
-`python bbmix.py`
+2. `python bbmix.py`
 
-sample
+### generated image sample
 
 ![sample-image](sample.png)
