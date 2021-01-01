@@ -1,9 +1,8 @@
-crawling from google using icrawler
+## crawling from google using icrawler
 
+### usage
 
-usage: 
+1. update list of keywords
 
-update list of keywords
-
-`python crawl.py`
+2. `python crawl.py`
 
