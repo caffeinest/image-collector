@@ -2,7 +2,9 @@
 
 ### usage
 
-1. update selected_labels dict
+1. download image labels and metadata from openimage
 
-2. `python collect.py`
+2. update selected_labels dict
+
+3. `python collect.py`
 
