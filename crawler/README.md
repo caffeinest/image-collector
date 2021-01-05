@@ -4,5 +4,7 @@
 
 1. update list of keywords
 
-2. `python crawl.py`
+2. update appropriate filters to your keywords
+
+3. `python crawl.py`
 
